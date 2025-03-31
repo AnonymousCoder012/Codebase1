@@ -8,7 +8,7 @@
 
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License along
@@ -54,7 +54,7 @@ class FedLMOptimizer(Optimizer):
                     noise = torch.normal(mean=0, std=dp_sigma, size=p.data.shape).to(device)
                     torch.nn.utils.clip_grad_norm_(parameters=p.grad.data, max_norm=5.0, norm_type=2)
                     if laplacian:
-                        p.data.add_(other=LaplacianSmoothing(p.grad.data + 0.9*sc + noise, ls_sigma, device), alpha=-group['lr'])
+                        p.data.add_(other=LaplacianSmoothing(p.grad.data + 0.9*(sc-cc) + noise, ls_sigma, device), alpha=-group['lr'])
                     else:
                         p.data.add_(other=(p.grad.data + 0.9*sc  + noise), alpha=-group['lr'])
                 else:
